@@ -146,7 +146,7 @@ def getNvideaModel():
     # normalize images
     model.add(Lambda(lambda x: (x/255.0) - 0.5, input_shape=(160, 320, 3)))
     model.add(Cropping2D(cropping=((70, 25),(0,0))))
-    model.add(BatchNormalization())
+    # model.add(BatchNormalization())
     model.add(Convolution2D(24, 5, 5, subsample=(2, 2), activation="relu"))
     # model.add(BatchNormalization())
     model.add(Convolution2D(36, 5, 5, subsample=(2, 2), activation="relu"))
@@ -158,11 +158,8 @@ def getNvideaModel():
     model.add(Convolution2D(64, 3, 3, activation="relu"))
     # model.add(BatchNormalization())
     model.add(Flatten())
-    model.add(Dropout(0.7))
     model.add(Dense(100))
-    model.add(Dropout(0.7))
     model.add(Dense(50))
-    model.add(Dropout(0.7))
     model.add(Dense(10))
     model.add(Dense(1))
     model.compile(loss='mse', optimizer='adam')
@@ -181,7 +178,7 @@ def main():
         samples_per_epoch=len(train_samples),
         validation_data=validation_generator,
         nb_val_samples=len(validation_samples),
-        nb_epoch=5
+        nb_epoch=8
     )
 
     model.save('model_1.h5')
