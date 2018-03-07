@@ -27,13 +27,10 @@ dloc = [
         "data/track1_smooth_corners",
         "data/track1_recovery_from_sides",
         "data/track1_counterclock",
-        # "data/track2_center"
+        "data/track2_center",
+        "data/track1_more_corners",
+        "data/track1_counter_corners"
     ]
-
-
-
-
-
 
 dcolumns = [
     'image_center',
@@ -151,9 +148,7 @@ def main():
     train_generator = generator(train_samples, batch_size=32)
     validation_generator = generator(validation_samples, batch_size=32)
 
-
-
-    model.fit_generator(
+    history_object = model.fit_generator(
         train_generator,
         samples_per_epoch=len(train_samples),
         validation_data=validation_generator,
@@ -162,6 +157,14 @@ def main():
     )
 
     model.save('model_steering_nvidia_new.h5')
+
+
+    print(history_object.history.keys())
+    print('Loss')
+    print(history_object.history['loss'])
+    print('Validation Loss')
+    print(history_object.history['val_loss'])
+
 
 if __name__ == '__main__':
     main()
