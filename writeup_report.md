@@ -133,4 +133,4 @@ I had 46632 todal number of images including the augmented images and train the 
 
 
 
-[![video]()](https://www.youtube.com/watch?v=6-oEahR2mGI&feature=youtu.be)
+[![video]](https://www.youtube.com/watch?v=6-oEahR2mGI&feature=youtu.be)
