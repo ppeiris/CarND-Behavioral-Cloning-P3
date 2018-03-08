@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np 
 import cv2
 from keras.models import Sequential 
-from keras.layers import Flatten, Dense 
+from keras.layers import Flatten, Dense, Lambda 
 
  
 # load the data from csv file 
@@ -42,6 +42,8 @@ y_train = np.array(lables)
 
 
 model = Sequential()
+# normalize images
+model.add(Lambda(lambda x: (x/255.0) - 0.5, input_shape=(160, 320, 3)))
 model.add(Flatten(input_shape=(160, 320, 3)))
 model.add(Dense(1))
 
@@ -49,7 +51,7 @@ model.compile(loss='mse', optimizer='adam')
 model.fit(
 	x_train, 
 	y_train, 
-	nb_epoch=50,	
+	nb_epoch=2,	
 	validation_split=0.2, 
 	shuffle=True,
 )
