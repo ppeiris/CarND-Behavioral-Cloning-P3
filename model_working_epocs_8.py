@@ -17,40 +17,26 @@ from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
 import sklearn
 
-# Configs
-# dloc = [
-#         # "data/set_1_steering/data",
-#         # "data/set_2_moredata_steering/data",
-#         # "data/data_track1_center_counter_drive/data",
-#         "data/data_track1_center_drive/data",
-#         "data/track1_center",
-#         "data/track1_smooth_corners",
-#         "data/track1_recovery_from_sides",
-#         "data/track1_counterclock",
-#         "data/track2_center",
-#         "data/track1_more_corners",
-#         "data/track1_counter_corners"
-#     ]
-
-
-
-
+# Training data
 dloc = [
     "newdata/track1_center",
     "newdata/track1_corners",
     "newdata/track1_counter_center",
     "newdata/track1_counter_corners",
     "newdata/track1_recovery_corners",
+    # "data/data_samples",
     "data/track2_center",
     "data/track1_center",
     "data/track1_smooth_corners",
     "data/track1_recovery_from_sides",
-    # "data/track1_counterclock",
+    "data/track1_counterclock",
     "data/track2_center",
+    "newdata/track1_center_2",
     # "data/track1_more_corners",
     # "data/track1_counter_corners"
 ];
 
+# columns for pandas dataframe
 dcolumns = [
     'image_center',
     'image_left',
@@ -63,7 +49,7 @@ dcolumns = [
 
 """ load data
 
-Load data from the log file in to a dataframe
+Load data from the log files in to a dataframe
 """
 def loadData():
 
@@ -88,17 +74,22 @@ def loadData():
     totalData = shuffle(totalData)
     # make some adjustment to the steeting
     totalData = steeringAdjustments(totalData)
-    # print(data.tail())
-    # print(len(totalData))
-    # print('-----------------------')
+
     return totalData
 
+"""
 
+split the data in to training and validation sets
+"""
 def getSamples():
     data = loadData()
     train_samples, validation_samples = train_test_split(data, test_size=0.2)
     return [train_samples, validation_samples]
 
+"""
+
+generator that return the image data as an numpy array
+"""
 def generator(samples, batch_size=32):
     num_samples = len(samples)
 
@@ -140,6 +131,10 @@ def steeringAdjustments(data):
     return data
 
 
+"""
+
+Deep Learning Network
+"""
 def getNvideaModel():
 
     model = Sequential()
@@ -159,6 +154,7 @@ def getNvideaModel():
     # model.add(BatchNormalization())
     model.add(Flatten())
     model.add(Dense(100))
+    # model.add(Dropout(0.8))
     model.add(Dense(50))
     model.add(Dense(10))
     model.add(Dense(1))
@@ -178,10 +174,10 @@ def main():
         samples_per_epoch=len(train_samples),
         validation_data=validation_generator,
         nb_val_samples=len(validation_samples),
-        nb_epoch=8
+        nb_epoch=3
     )
 
-    model.save('model_1.h5')
+    model.save('model_2.h5')
 
 
     print(history_object.history.keys())
