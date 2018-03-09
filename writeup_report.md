@@ -130,3 +130,7 @@ I have also use the track 2 to generate data to avoid overfitting and generalize
 I had 46632 todal number of images including the augmented images and train the model for 3 epocs. The validation and training losses as follows,
 
 ![c2](img/loss.png)
+
+
+
+[![video]](https://www.youtube.com/watch?v=6-oEahR2mGI&feature=youtu.be)
