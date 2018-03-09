@@ -95,15 +95,46 @@ Flattern the image data using Flattern layer
 model.add(Flatten())
 ```
 
-**LAYER 9 to LAYER 12**
-From layer 9 to layer 12, I have added fully connected layers to progressively bring the final output as a one single value that dictated the steering angle of the vehicle.
+**LAYER 9**
+Dropout Layer
 ```
-model.add(Dense(100))
-model.add(Dense(50))
-model.add(Dense(10))
-model.add(Dense(1))
+model.add(Dropout(0.5))
 ```
 
+**LAYER 10**
+Dense Layer with ReLu activation
+```
+model.add(Dense(512, activation="relu"))
+```
+
+**LAYER 11**
+Dropout Layer
+```
+model.add(Dropout(0.5))
+```
+
+**LAYER 12**
+Dense Layer with ReLu activation
+```
+model.add(Dense(128, activation="relu"))
+```
+
+**LAYER 13**
+Dropout Layer
+```
+model.add(Dropout(0.5))
+```
+
+**LAYER 14**
+Dense Layer with ReLu activation
+```
+model.add(Dense(32, activation="relu"))
+```
+
+**LAYER 15**
+```
+model.add(Dense(1))
+```
 
 
 #### 3. Creation of the Training Set & Training Process
@@ -127,10 +158,4 @@ I have also use the track 2 to generate data to avoid overfitting and generalize
 ![c1](img/center_2018_03_06_23_36_34_787.jpg)
 ![c2](img/center_2018_03_06_23_34_49_579.jpg)
 
-I had 46632 todal number of images including the augmented images and train the model for 3 epocs. The validation and training losses as follows,
-
-![c2](img/loss.png)
-
-
-
-[![video]](https://www.youtube.com/watch?v=6-oEahR2mGI&feature=youtu.be)
+I had 34682 todal number of images including the augmented images and train the model for 3 epocs.

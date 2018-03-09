@@ -19,21 +19,27 @@ import sklearn
 
 # Configs
 dloc = [
+    ## Center Data
+    "data/track1_center", # == 1
+    "newdata/track1_center_2", # -- 2
     "newdata/track1_center",
-    "newdata/track1_corners",
+    # "data/track2_center",
     "newdata/track1_counter_center",
-    "newdata/track1_counter_corners",
-    "newdata/track1_recovery_corners",
-    # "data/data_samples",
-    "data/track2_center",
-    "data/track1_center",
-    "data/track1_smooth_corners",
-    "data/track1_recovery_from_sides",
-    # "data/track1_counterclock",
-    "data/track2_center",
-    "newdata/track1_center_2",
-    # "data/track1_more_corners",
-    # "data/track1_counter_corners"
+    ## Corners
+    "newdata/track1_corners", # == 1
+    # "data/track1_more_corners", # -- 5
+    "newdata/track1_corners_3", # -- 6
+    # "data/track1_smooth_corners", # 8
+    "newdata/track_corners_4", # --9
+    # "newdata/track1_recovery_corners", #
+    # "newdata/track1_counter_corners", #-- bad
+    # "data/track1_counter_corners", # -- bad
+    # bridge
+    # "newdata/track1_bridge", # -- 3
+    # Recovery from sides
+    "data/track1_recovery_from_sides", # == 1
+    # "data/track1_counterclock", # == 2
+    ########################################
 ];
 
 dcolumns = [
@@ -77,8 +83,7 @@ def loadData():
     return totalData
 
 """
-
-split the data in to training and validation sets
+data split
 """
 def getSamples():
     data = loadData()
@@ -86,8 +91,7 @@ def getSamples():
     return [train_samples, validation_samples]
 
 """
-
-generator that return the image data as an numpy array
+read data and load images using generators
 """
 def generator(samples, batch_size=32):
     num_samples = len(samples)
@@ -135,7 +139,7 @@ def getNvideaModel():
     model = Sequential()
     # normalize images
     model.add(Lambda(lambda x: (x/255.0) - 0.5, input_shape=(160, 320, 3)))
-    model.add(Cropping2D(cropping=((70, 25),(0,0))))
+    model.add(Cropping2D(cropping=((75, 20),(0,0))))
     # model.add(BatchNormalization())
     model.add(Convolution2D(24, 5, 5, subsample=(2, 2), activation="relu"))
     # model.add(BatchNormalization())
@@ -148,9 +152,12 @@ def getNvideaModel():
     model.add(Convolution2D(64, 3, 3, activation="relu"))
     # model.add(BatchNormalization())
     model.add(Flatten())
-    model.add(Dense(100))
-    model.add(Dense(50))
-    model.add(Dense(10))
+    model.add(Dropout(0.5))
+    model.add(Dense(512, activation="relu"))
+    model.add(Dropout(0.5))
+    model.add(Dense(128, activation="relu"))
+    model.add(Dropout(0.5))
+    model.add(Dense(32, activation="relu"))
     model.add(Dense(1))
     model.compile(loss='mse', optimizer='adam')
     return model
@@ -171,13 +178,13 @@ def main():
         nb_epoch=3
     )
 
-    model.save('model1.h5')
+    model.save('model.h5')
 
-    # print(history_object.history.keys())
-    # print('Loss')
-    # print(history_object.history['loss'])
-    # print('Validation Loss')
-    # print(history_object.history['val_loss'])
+    print(history_object.history.keys())
+    print('Loss')
+    print(history_object.history['loss'])
+    print('Validation Loss')
+    print(history_object.history['val_loss'])
 
 
 if __name__ == '__main__':
